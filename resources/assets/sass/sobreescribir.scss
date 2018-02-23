@@ -11,6 +11,8 @@ a.is-muted:hover{
     position: relative;
 
   .dropdown-menu{
+    box-shadow: 0 0 8px #777;
+    background-color: white;
     display: none;
     position: absolute;
     left: 0;

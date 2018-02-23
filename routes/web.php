@@ -17,4 +17,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::prefix('administrar')->middleware('role:superadministrator|administrator|editor|author|contributor')->group(function(){
+    Route::get('/', 'AdministrarController@index');
+    Route::resource('/usuarios', 'UserController');
+    Route::get('/dashboard', 'AdministrarController@dashboard')->name('administrar.dashboard');
+});
+
 Route::get('/home', 'HomeController@index')->name('home');
