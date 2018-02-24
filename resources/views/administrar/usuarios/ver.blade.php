@@ -9,7 +9,7 @@
         </div>
 
         <div class="column">
-          <a href="{{route('usuarios.edit', $usuario->id)}}" class="button is-primary is-pulled-right"><i class="fa fa-user-plus m-r-10"></i>Editar Usuario</a>
+          <a href="{{route('usuarios.edit', $usuario->id)}}" class="button is-primary is-pulled-right is-outlined"><i class="fa fa-edit m-r-10"></i>Editar Usuario</a>
         </div>
 
       </div>
@@ -37,6 +37,16 @@
                     SI
                 @endif
               </p>
+          </div>
+
+          <div class="field">
+            <label for="email" class="label">Roles del usuario:</label>
+            <ul>
+              {{$usuario->roles->count() == 0 ? 'Aún no han sigo asignados roles a este usuario' : ''}}
+              @foreach($usuario->roles as $role)
+                <li>{{$role->display_name}} ({{$role->description}})</li>
+              @endforeach
+            </ul>
           </div>
 
         </div>

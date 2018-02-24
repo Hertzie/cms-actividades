@@ -7,7 +7,7 @@
           <h1 class="title">Usuarios</h1>
         </div>
         <div class="column m-l-100">
-          <a href="{{route('usuarios.create')}}" class="button is-primary is-pulled-right"><i class="fa fa-user-plus m-r-10"></i>Crear nuevo usuario</a>
+          <a href="{{route('usuarios.create')}}" class="button is-primary is-pulled-right is-outlined"><i class="fa fa-user-plus m-r-10"></i>Crear nuevo usuario</a>
         </div>
       </div>
       <hr>
@@ -41,8 +41,8 @@
                   @endif
                 </td>
                 <td>
-                  <a class="button is-link is-small" href="{{route('usuarios.show', $u->id)}}"><i class="fa fa-edit"></i></a>
-                  <a class="button is-link is-small" href="{{route('usuarios.destroy', $u->id)}}"><i class="fa fa-trash-o"></i></a>
+                  <a class="button is-link is-small tooltip-left" href="{{route('usuarios.show', $u->id)}}" data-tooltip="Info"><i class="fa fa-info"></i></a>
+                  <a class="button is-link is-small tooltip-right" data-tooltip="Editar" href="{{route('usuarios.edit', $u->id)}}"><i class="fa fa-edit"></i></a>
                 </td>
               </tr>
             @endforeach
@@ -52,4 +52,5 @@
     </div>
       {{$usuarios->links()}}
     </div>
+
 @stop

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Role;
 use Session;
 
 class UserController extends Controller
@@ -43,7 +44,7 @@ class UserController extends Controller
             'email' => 'required|unique:users'
         ]);
 
-        if($request->password && !empty($request->password)){
+        if(!empty($request->password)){
             $contraseña = trim($request->password);
         }
         else{
@@ -53,7 +54,7 @@ class UserController extends Controller
             $str = '';
             $tope = mb_strlen($tokens, '8bit') -1;
 
-            for($i = 0; $i < $max; $i++){
+            for($i = 0; $i < $max; ++$i){
                 $str .= $tokens[random_int(0,$tope)];
             }
             $contraseña = $str;
@@ -62,15 +63,13 @@ class UserController extends Controller
         $usuario->name = $request->name;
         $usuario->email = $request->email;
         $usuario->password = bcrypt($contraseña);
+        $usuario->save();
 
-        if($usuario->save()){
-          Session::flash('success', 'Usuario creado correctamente.');
-          return redirect()->route('usuarios.index');
+        if($request->roles){
+          $user->syncRoles(explode(',', $request->roles));
         }
-        else{
-          Session::flash('danger', 'Algo pasó al intentar crear al usuario. Error.');
-          return redirect()->route('usuarios.create');
-        }
+
+        return redirect()->route('usuarios.show', $usuario->id);
     }
 
     /**
@@ -81,7 +80,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $usuario = User::findOrFail($id);
+        $usuario = User::where('id', $id)->with('roles')->first();
         return view('administrar.usuarios.ver', compact('usuario'));
     }
 
@@ -93,8 +92,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $usuario = User::findOrFail($id);
-        return view('administrar.usuarios.editar')->withUser($usuario);
+        $usuario = User::where('id',$id)->with('roles')->first();
+        $roles = Role::all();
+        return view('administrar.usuarios.editar', compact('usuario', 'roles'));
     }
 
     /**
@@ -106,7 +106,39 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email,'.$id
+        ]);
+
+        $usuario = User::findOrFail($id);
+        $usuario->name = $request->name;
+        $usuario->email = $request->email;
+
+        if($request->password_opciones == "auto"){
+
+          $max = 10;
+          $tokens = '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          $str = '';
+          $tope = mb_strlen($tokens, '8bit') -1;
+
+          for($i = 0; $i < $max; $i++){
+              $str .= $tokens[random_int(0,$tope)];
+          }
+          $usuario->password = bcrypt($str);
+        }
+        elseif($request->password_opciones == "manual"){
+          $contraseña = bcrypt($request->password);
+        }
+        $usuario->password = bcrypt($request->password);
+        $usuario->activo = $request->activo;
+        $usuario->save();
+
+        $usuario->syncRoles(explode(',', $request->roles));
+
+        return redirect()->route('usuarios.show', $id);
+
+
     }
 
     /**

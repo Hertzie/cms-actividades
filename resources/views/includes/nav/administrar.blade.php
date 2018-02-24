@@ -12,7 +12,15 @@
     </p>
     <ul class="menu-list">
       <li><a href="{{route('usuarios.index')}}">Administración de Usuarios</a></li>
-      <li><a href="">Roles &amp; Permisos</a></li>
+      <li>
+        <a href="">Roles &amp; Permisos</a>
+        <ul>
+          <li><a href="{{route('permisos.index')}}">Permisos</a></li>
+          <li><a href="{{route('roles.index')}}">Roles</a></li>
+        </ul>
+      </li>
+
+
     </ul>
   </aside>
 </div>

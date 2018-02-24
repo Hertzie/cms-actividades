@@ -19,6 +19,8 @@
     },
     "dependencies": {
         "buefy": "^0.4.4",
-        "font-awesome": "^4.7.0"
+        "bulma-extensions": "^1.0.3",
+        "font-awesome": "^4.7.0",
+        "vue-bulma-tooltip": "^1.0.4"
     }
 }

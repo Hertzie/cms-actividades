@@ -35,7 +35,7 @@
                 </p>
               </div>
 
-              <button class="button is-success">Crear</button>
+              <button class="button is-primary is-outlined"><i class="fa fa-plus m-r-10"></i>Crear</button>
           </form>
         </div>
       </div>
